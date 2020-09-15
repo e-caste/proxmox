@@ -20,9 +20,6 @@ DISK_SIZE=
 # it is the string in the left panel of the web dashboard
 # e.g. local-lvm, local, freenas
 DST_STORAGE_ID=
-# the default username of the template VM
-# e.g. ubuntu, johnny
-USERNAME=
 # the path to the cloud-init yaml user config file
 # e.g. freenas:snippets/user.yaml
 CI_YAML_PATH=
