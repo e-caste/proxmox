@@ -1,0 +1,36 @@
+#cloud-config
+
+users:
+ - name: caste
+   sudo: ALL=(ALL) NOPASSWD:ALL
+   groups: users, admin, docker
+   home: /home/caste
+   shell: /bin/bash
+   lock_passwd: false
+   ssh-authorized-keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGKbIL5QAv//uZ5seakdsYYmRUPummFQWAruR0wUUkkD6XycJ+OCquZPwKnCqmUKmVe7W0GILOOWm8gmlpJjxfxdhEONjTY9YSIXt5gqvb7H19adu93+N/nacLQJ54uQsw33OHsC01SeCTWYSbjSfuTMaJtSGd/w1c/qHAX1TDCJRD3yFokhHloA0f1Pz5iDC6GqXppOWmKQwnyoPrCYnmo5RPLl4DvuLwwFhiXKLjRbY9iW9PNx9n3U3ebqs2FaAPjfVJ+1FYyU3aTmDMNsLyQoB3HL2lXhWpILJc4TcCkulRvHI7/Nf0nc/oE+sJBeJRv8dJiws5n/ikcZLTDMZ9
+
+ssh_pwauth: false
+disable_root: false
+
+packages:
+ - docker.io
+ - curl
+ - apt-transport-https
+ - ca-certificates
+ - gnupg-agent
+ - net-tools
+ - qemu-guest-agent
+
+runcmd:
+ - systemctl start qemu-guest-agent
+ - curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+ - echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >> /etc/apt/sources.list.d/kubernetes.list
+ - apt-get update
+ - apt-get install -y kubelet kubeadm kubectl
+ - apt-mark hold kubelet kubeadm kubectl
+ - git clone https://github.com/e-caste/proxmox /home/caste/proxmox
+ - mv /home/caste/proxmox/k8s/st*.sh /home/caste
+ - rm -rf /home/caste/proxmox
+
+final_message: "The system is up in $UPTIME seconds! Welcome, caste!"
