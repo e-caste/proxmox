@@ -1,6 +1,8 @@
 #!/bin/bash
 
-for node in 1000 1001 1002; do
+source nodes.sh
+
+for node in ${NODES[*]}; do
     qm stop $node
     qm destroy $node
 done
